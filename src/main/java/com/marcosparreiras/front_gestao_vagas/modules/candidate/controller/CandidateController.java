@@ -84,4 +84,16 @@ public class CandidateController {
       return "redirect:/candidate/login";
     }
   }
+
+  @GetMapping("/jobs")
+  @PreAuthorize("hasRole('CANDIDATE')")
+  public String jobs(HttpSession session, Model model) {
+    try {
+      // Token token = (Token) session.getAttribute("TOKEN");
+      // model.addAttribute();
+      return "/candidate/jobs";
+    } catch (Exception e) {
+      return "redirect:/candidate/login";
+    }
+  }
 }
