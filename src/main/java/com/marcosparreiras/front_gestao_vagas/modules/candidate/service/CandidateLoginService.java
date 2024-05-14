@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class CandidateService {
+public class CandidateLoginService {
 
-  public Token login(String username, String password) {
+  public Token execute(String username, String password) {
     RestTemplate rt = new RestTemplate();
 
     Map<String, String> data = new HashMap<>();
