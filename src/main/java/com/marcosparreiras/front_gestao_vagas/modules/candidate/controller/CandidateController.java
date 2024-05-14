@@ -26,12 +26,16 @@ public class CandidateController {
     String username,
     String password
   ) {
-    this.candidateService.login(username, password);
-    if (username.equals("marcos")) {
-      return "/candidate/profile";
+    try {
+      this.candidateService.login(username, password);
+      return "redirect:/candidate/profile";
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute(
+        "errorMessage",
+        "Invalid credentials"
+      );
+      return "redirect:/candidate/login";
     }
-    redirectAttributes.addFlashAttribute("errorMessage", "Invalid credentials");
-    return "redirect:/candidate/login";
   }
 
   @GetMapping("/profile")

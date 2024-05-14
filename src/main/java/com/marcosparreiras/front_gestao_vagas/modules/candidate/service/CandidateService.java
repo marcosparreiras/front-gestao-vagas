@@ -1,5 +1,6 @@
 package com.marcosparreiras.front_gestao_vagas.modules.candidate.service;
 
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CandidateService {
 
-  public void login(String username, String password) {
+  public Token login(String username, String password) {
     RestTemplate rt = new RestTemplate();
 
     Map<String, String> data = new HashMap<>();
@@ -23,11 +24,11 @@ public class CandidateService {
 
     HttpEntity<Map<String, String>> request = new HttpEntity<>(data, headers);
 
-    var result = rt.postForObject(
+    Token result = rt.postForObject(
       "http://localhost:8080/candidate/auth",
       request,
-      String.class
+      Token.class
     );
-    System.out.println(result);
+    return result;
   }
 }

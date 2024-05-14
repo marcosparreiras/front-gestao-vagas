@@ -3,10 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" th:href="@{/styles/login.css}" />
+    <link rel="stylesheet" th:href="@{/styles/profile.css}" />
     <title>Login Candidate</title>
   </head>
   <body>
-    <h1>Profile</h1>
+    <nav>
+      <a href="/candidate/profile" class="btn-nav-active">Profile</a>
+      <a href="/candidate/Jobs">Jobs</a>
+    </nav>
+    <div class="profile-container">
+      <div>
+        <span>Name</span>
+        <span>Marcos</span>
+      </div>
+
+      <div>
+        <span>User</span>
+        <span>Marcos</span>
+      </div>
+
+      <div>
+        <span>Email</span>
+        <span>marcos@example.com</span>
+      </div>
+    </div>
   </body>
 </html>
