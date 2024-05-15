@@ -18,6 +18,8 @@ public class SecurityConfig {
         auth.requestMatchers("/styles/**").permitAll();
         auth.requestMatchers("/candidate/login").permitAll();
         auth.requestMatchers("/candidate/sing-in").permitAll();
+        auth.requestMatchers("/candidate/create").permitAll();
+        auth.requestMatchers("/candidate/register").permitAll();
         auth.anyRequest().authenticated();
       })
       .formLogin(form -> {

@@ -4,6 +4,7 @@ import com.marcosparreiras.front_gestao_vagas.exceptions.UnauthorizedException;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Candidate;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Job;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.JobApplication;
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.NewCandidate;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateLoginService;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateProfileService;
@@ -40,6 +41,26 @@ public class CandidateController {
 
   @Autowired
   private JobsApplyService jobsApplyService;
+
+  @GetMapping("/create")
+  public String create() {
+    return "/candidate/create";
+  }
+
+  @PostMapping("/register")
+  public String register(
+    RedirectAttributes redirectAttributes,
+    NewCandidate newCandidate
+  ) {
+    if (!newCandidate.getPassword().equals(newCandidate.getConfirmPassword())) {
+      redirectAttributes.addFlashAttribute(
+        "errorMessage",
+        "Passwords do not match"
+      );
+      return "redirect:/candidate/create";
+    }
+    return "redirect:/candidate/login";
+  }
 
   @GetMapping("/login")
   public String login() {

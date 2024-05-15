@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" th:href="@{/styles/create.css}" />
+    <title>Create Candidate</title>
+  </head>
+  <body>
+    <form
+      th:action="@{/candidate/register}"
+      method="post"
+      th:object="${newCandidate}"
+    >
+      <div class="form-header">Opportunity Management</div>
+      <div class="form-inputs-container">
+        <a href="/candidate/login">Login</a>
+        <input type="text" name="name" placeholder="name" />
+        <input type="text" name="userName" placeholder="user name" />
+        <input type="email" name="email" placeholder="email" />
+        <input type="password" name="password" placeholder="password" />
+        <input
+          type="password"
+          name="confirmPassword"
+          placeholder="confirm password"
+        />
+        <textarea name="description" placeholder="description"></textarea>
+        <p
+          class="error-message"
+          th:if="${errorMessage}"
+          th:text="${errorMessage}"
+        ></p>
+        <button>Register</button>
+      </div>
+    </form>
+  </body>
+</html>
