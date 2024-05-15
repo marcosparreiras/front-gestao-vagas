@@ -1,14 +1,18 @@
 package com.marcosparreiras.front_gestao_vagas.modules.candidate.controller;
 
+import com.marcosparreiras.front_gestao_vagas.exceptions.UnauthorizedException;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Candidate;
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Job;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateLoginService;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateProfileService;
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.JobsQueryService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +32,9 @@ public class CandidateController {
 
   @Autowired
   private CandidateProfileService candidateProfileService;
+
+  @Autowired
+  private JobsQueryService jobsQueryService;
 
   @GetMapping("/login")
   public String login() {
@@ -56,6 +63,8 @@ public class CandidateController {
         grants
       );
 
+      auth.setDetails(token.getToken());
+
       SecurityContext securityContext = SecurityContextHolder.getContext();
       securityContext.setAuthentication(auth);
       session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
@@ -75,25 +84,31 @@ public class CandidateController {
   @PreAuthorize("hasRole('CANDIDATE')")
   public String profile(HttpSession session, Model model) {
     try {
-      Token token = (Token) session.getAttribute("TOKEN");
-      Candidate candidate =
-        this.candidateProfileService.execute(token.getToken());
+      String token = this.getToken();
+      Candidate candidate = this.candidateProfileService.execute(token);
       model.addAttribute("candidate", candidate);
       return "/candidate/profile";
-    } catch (Exception e) {
+    } catch (UnauthorizedException e) {
       return "redirect:/candidate/login";
     }
   }
 
   @GetMapping("/jobs")
   @PreAuthorize("hasRole('CANDIDATE')")
-  public String jobs(HttpSession session, Model model) {
-    try {
-      // Token token = (Token) session.getAttribute("TOKEN");
-      // model.addAttribute();
-      return "/candidate/jobs";
-    } catch (Exception e) {
-      return "redirect:/candidate/login";
+  public String jobs(HttpSession session, Model model, String filter) {
+    String token = this.getToken();
+    System.out.println(filter);
+    if (filter != null) {
+      List<Job> jobs = this.jobsQueryService.execute(filter, token);
+      model.addAttribute("jobs", jobs);
     }
+    return "/candidate/jobs";
+  }
+
+  private String getToken() {
+    SecurityContext context = SecurityContextHolder.getContext();
+    Authentication auth = context.getAuthentication();
+    String token = auth.getDetails().toString();
+    return token;
   }
 }

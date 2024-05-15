@@ -16,6 +16,9 @@
         <input type="text" name="filter" placeholder="Search jobs" />
         <button type="submit">Buscar</button>
       </form>
+      <div th:each="job : ${jobs}">
+        <span th:text="${job.description}"> Title </span>
+      </div>
     </div>
   </body>
 </html>
