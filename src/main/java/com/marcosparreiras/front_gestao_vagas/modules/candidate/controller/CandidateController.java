@@ -3,9 +3,11 @@ package com.marcosparreiras.front_gestao_vagas.modules.candidate.controller;
 import com.marcosparreiras.front_gestao_vagas.exceptions.UnauthorizedException;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Candidate;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Job;
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.JobApplication;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateLoginService;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateProfileService;
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.JobsApplyService;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.JobsQueryService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
@@ -35,6 +37,9 @@ public class CandidateController {
 
   @Autowired
   private JobsQueryService jobsQueryService;
+
+  @Autowired
+  private JobsApplyService jobsApplyService;
 
   @GetMapping("/login")
   public String login() {
@@ -82,7 +87,7 @@ public class CandidateController {
 
   @GetMapping("/profile")
   @PreAuthorize("hasRole('CANDIDATE')")
-  public String profile(HttpSession session, Model model) {
+  public String profile(Model model) {
     try {
       String token = this.getToken();
       Candidate candidate = this.candidateProfileService.execute(token);
@@ -95,7 +100,7 @@ public class CandidateController {
 
   @GetMapping("/jobs")
   @PreAuthorize("hasRole('CANDIDATE')")
-  public String jobs(HttpSession session, Model model, String filter) {
+  public String jobs(Model model, String filter) {
     try {
       String token = this.getToken();
       System.out.println(filter);
@@ -105,6 +110,23 @@ public class CandidateController {
       model.addAttribute("jobs", jobs);
 
       return "/candidate/jobs";
+    } catch (UnauthorizedException e) {
+      return "redirect:/candidate/login";
+    }
+  }
+
+  @PostMapping("/jobs/apply")
+  @PreAuthorize("hasRole('CANDIDATE')")
+  public String jobsApply(String jobId) {
+    try {
+      String token = this.getToken();
+
+      JobApplication jobApllication =
+        this.jobsApplyService.execute(token, jobId);
+
+      System.out.println(jobApllication);
+
+      return "redirect:/candidate/jobs";
     } catch (UnauthorizedException e) {
       return "redirect:/candidate/login";
     }

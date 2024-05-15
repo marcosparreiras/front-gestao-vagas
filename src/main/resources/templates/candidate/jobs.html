@@ -17,15 +17,21 @@
         <button type="submit">Search</button>
       </form>
       <div th:each="job : ${jobs}">
-        <div class="job-container">
+        <form
+          th:action="@{/candidate/jobs/apply}"
+          method="post"
+          class="job-container"
+        >
+          <input type="hidden" name="jobId" th:value="${job.id}" />
+
           <h3 th:text="${job.description}"></h3>
           <span th:text="${job.level}" class="job-level"></span>
           <div class="job-benefits">
             <h4>Benefits:</h4>
             <span th:text="${job.benefits}"></span>
           </div>
-          <button>Apply</button>
-        </div>
+          <button type="submit">Apply</button>
+        </form>
       </div>
     </div>
   </body>
