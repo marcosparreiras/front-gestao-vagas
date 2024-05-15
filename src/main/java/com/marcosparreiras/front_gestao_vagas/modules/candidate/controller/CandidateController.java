@@ -96,13 +96,18 @@ public class CandidateController {
   @GetMapping("/jobs")
   @PreAuthorize("hasRole('CANDIDATE')")
   public String jobs(HttpSession session, Model model, String filter) {
-    String token = this.getToken();
-    System.out.println(filter);
-    if (filter != null) {
+    try {
+      String token = this.getToken();
+      System.out.println(filter);
+      filter = filter != null ? filter : "";
+
       List<Job> jobs = this.jobsQueryService.execute(filter, token);
       model.addAttribute("jobs", jobs);
+
+      return "/candidate/jobs";
+    } catch (UnauthorizedException e) {
+      return "redirect:/candidate/login";
     }
-    return "/candidate/jobs";
   }
 
   private String getToken() {

@@ -1,5 +1,6 @@
 package com.marcosparreiras.front_gestao_vagas.modules.candidate.service;
 
+import com.marcosparreiras.front_gestao_vagas.exceptions.UnauthorizedException;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Job;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class JobsQueryService {
 
-  public List<Job> execute(String filter, String token) {
+  public List<Job> execute(String filter, String token)
+    throws UnauthorizedException {
     RestTemplate rt = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
     headers.setBearerAuth(token);
@@ -26,15 +28,19 @@ public class JobsQueryService {
       .fromHttpUrl("http://localhost:8080/candidate/jobs")
       .queryParam("filter", filter);
 
-    var result = rt.exchange(
-      uriBuilder.toUriString(),
-      HttpMethod.GET,
-      request,
-      responseType
-    );
+    try {
+      var result = rt.exchange(
+        uriBuilder.toUriString(),
+        HttpMethod.GET,
+        request,
+        responseType
+      );
 
-    List<Job> jobs = result.getBody();
+      List<Job> jobs = result.getBody();
 
-    return jobs;
+      return jobs;
+    } catch (Exception e) {
+      throw new UnauthorizedException();
+    }
   }
 }

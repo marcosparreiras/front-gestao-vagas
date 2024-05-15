@@ -14,10 +14,18 @@
     <div class="jobs-container">
       <form action="">
         <input type="text" name="filter" placeholder="Search jobs" />
-        <button type="submit">Buscar</button>
+        <button type="submit">Search</button>
       </form>
       <div th:each="job : ${jobs}">
-        <span th:text="${job.description}"> Title </span>
+        <div class="job-container">
+          <h3 th:text="${job.description}"></h3>
+          <span th:text="${job.level}" class="job-level"></span>
+          <div class="job-benefits">
+            <h4>Benefits:</h4>
+            <span th:text="${job.benefits}"></span>
+          </div>
+          <button>Apply</button>
+        </div>
       </div>
     </div>
   </body>

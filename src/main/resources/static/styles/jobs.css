@@ -65,6 +65,31 @@ nav a:hover {
   align-items: center;
 }
 
+.job-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background-color: rgb(39, 51, 68);
+  padding: 12px;
+  box-shadow: 3px 3px 5px rgb(17 24 39);
+}
+
+.job-level {
+  display: inline-block;
+  background-color: rgb(17 24 39);
+  padding: 4px 6px;
+  border-radius: 10px;
+}
+
+.job-benefits h4 {
+  display: inline-block;
+}
+
+.job-container button {
+  width: 40%;
+}
+
 input {
   background-color: rgb(107 114 128);
   display: block;
