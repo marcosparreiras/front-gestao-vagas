@@ -6,6 +6,7 @@ import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Job;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.JobApplication;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.NewCandidate;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateCreateService;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateLoginService;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.CandidateProfileService;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.service.JobsApplyService;
@@ -24,6 +25,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -37,6 +39,9 @@ public class CandidateController {
   private CandidateProfileService candidateProfileService;
 
   @Autowired
+  private CandidateCreateService candidateCreateService;
+
+  @Autowired
   private JobsQueryService jobsQueryService;
 
   @Autowired
@@ -47,19 +52,41 @@ public class CandidateController {
     return "/candidate/create";
   }
 
-  @PostMapping("/register")
-  public String register(
+  @PostMapping("/create")
+  public String save(
     RedirectAttributes redirectAttributes,
     NewCandidate newCandidate
   ) {
-    if (!newCandidate.getPassword().equals(newCandidate.getConfirmPassword())) {
+    boolean isNameValid = newCandidate.getName().length() >= 3;
+    boolean isUserNameValid = newCandidate.getUserName().length() >= 3;
+    boolean isEmailValid = newCandidate.getEmail().length() >= 3;
+    boolean isPasswordValid = newCandidate.getPassword().length() >= 6;
+    boolean isPasswordsMatching = newCandidate
+      .getPassword()
+      .equals(newCandidate.getConfirmPassword());
+
+    boolean isDataValid =
+      isNameValid &&
+      isUserNameValid &&
+      isEmailValid &&
+      isPasswordValid &&
+      isPasswordsMatching;
+
+    if (!isDataValid) {
+      redirectAttributes.addFlashAttribute("errorMessage", "Invalid data");
+      return "redirect:/candidate/create";
+    }
+
+    try {
+      this.candidateCreateService.execute(newCandidate);
+      return "redirect:/candidate/login";
+    } catch (HttpClientErrorException e) {
       redirectAttributes.addFlashAttribute(
         "errorMessage",
-        "Passwords do not match"
+        "Something went wrong, try again later"
       );
       return "redirect:/candidate/create";
     }
-    return "redirect:/candidate/login";
   }
 
   @GetMapping("/login")
