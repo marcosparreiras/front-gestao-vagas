@@ -28,7 +28,7 @@
         <span>Email:</span>
         <span th:text="${company.email}"></span>
       </div>
-      <div class="jobs-container">
+      <div class="jobs-container" th:if="${jobs.size() > 0}">
         <h2>Company Jobs</h2>
         <div class="job-wrapper" th:each="job : ${jobs}">
           <h3 th:text="${job.description}"></h3>

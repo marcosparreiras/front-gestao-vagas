@@ -3,6 +3,7 @@ package com.marcosparreiras.front_gestao_vagas.modules.company.service;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Job;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,9 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class CompanyGetJobsService {
 
+  @Value("${host.api.gestao_vagas}")
+  private String hostAPIGestaoVagas;
+
   public List<Job> execute(String token) {
     RestTemplate rt = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
@@ -22,7 +26,7 @@ public class CompanyGetJobsService {
     ParameterizedTypeReference<List<Job>> responseType = new ParameterizedTypeReference<List<Job>>() {};
 
     var result = rt.exchange(
-      "http://localhost:8080/company/job/",
+      this.hostAPIGestaoVagas.concat("/company/job/"),
       HttpMethod.GET,
       request,
       responseType
