@@ -139,7 +139,7 @@ public class CompanyController {
     String token = this.getToken();
     this.companyCreateJobService.execute(token, newJob);
 
-    return "redirect:/company/jobs";
+    return "redirect:/company/profile";
   }
 
   @GetMapping("/profile")
@@ -150,6 +150,15 @@ public class CompanyController {
     model.addAttribute("jobs", jobs);
 
     return "/company/profile";
+  }
+
+  @GetMapping("/logout")
+  public String logout(HttpSession session) {
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    securityContext.setAuthentication(null);
+    session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+    session.setAttribute("TOKEN", null);
+    return "redirect:/company/login";
   }
 
   private String getToken() {
