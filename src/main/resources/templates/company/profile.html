@@ -13,20 +13,21 @@
       <a href="/company/logout">Logout</a>
     </nav>
     <div class="profile-container">
-      <!-- <div>
-        <span>Name</span>
+      <h2>Company Profile</h2>
+      <div>
+        <span>Name:</span>
         <span th:text="${company.name}"></span>
       </div>
 
       <div>
-        <span>User</span>
+        <span>User:</span>
         <span th:text="${company.userName}"></span>
       </div>
 
       <div>
-        <span>Email</span>
+        <span>Email:</span>
         <span th:text="${company.email}"></span>
-      </div> -->
+      </div>
       <div class="jobs-container">
         <h2>Company Jobs</h2>
         <div class="job-wrapper" th:each="job : ${jobs}">

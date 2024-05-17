@@ -1,5 +1,6 @@
 package com.marcosparreiras.front_gestao_vagas.modules.company.controller;
 
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Company;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Job;
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
 import com.marcosparreiras.front_gestao_vagas.modules.company.dto.NewCompany;
@@ -8,6 +9,7 @@ import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyCre
 import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyCreateService;
 import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyGetJobsService;
 import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyLoginService;
+import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyProfileService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,9 @@ public class CompanyController {
 
   @Autowired
   private CompanyGetJobsService companyGetJobsService;
+
+  @Autowired
+  private CompanyProfileService companyProfileService;
 
   @GetMapping("/create")
   public String create() {
@@ -147,7 +152,10 @@ public class CompanyController {
   public String profile(Model model) {
     String token = this.getToken();
     List<Job> jobs = this.companyGetJobsService.execute(token);
+    Company company = this.companyProfileService.execute(token);
+    System.out.println(company);
     model.addAttribute("jobs", jobs);
+    model.addAttribute("company", company);
 
     return "/company/profile";
   }
