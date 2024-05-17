@@ -1,8 +1,16 @@
 package com.marcosparreiras.front_gestao_vagas.modules.company.controller;
 
+import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
 import com.marcosparreiras.front_gestao_vagas.modules.company.dto.NewCompany;
 import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyCreateService;
+import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyLoginService;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +24,9 @@ public class CompanyController {
 
   @Autowired
   private CompanyCreateService companyCreateService;
+
+  @Autowired
+  private CompanyLoginService companyLoginService;
 
   @GetMapping("/create")
   public String create() {
@@ -63,4 +74,49 @@ public class CompanyController {
   public String login() {
     return "/company/login";
   }
+
+  @PostMapping("/login")
+  public String signin(
+    RedirectAttributes redirectAttributes,
+    HttpSession session,
+    String userName,
+    String password
+  ) {
+    try {
+      Token token = this.companyLoginService.execute(userName, password);
+      System.out.println(token.getToken());
+
+      List<SimpleGrantedAuthority> grants = token
+        .getRoles()
+        .stream()
+        .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+        .toList();
+
+      UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+        null,
+        null,
+        grants
+      );
+
+      auth.setDetails(token.getToken());
+
+      SecurityContext securityContext = SecurityContextHolder.getContext();
+      securityContext.setAuthentication(auth);
+      session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+      session.setAttribute("TOKEN", token);
+      return "/company/profile";
+    } catch (Exception e) {
+      redirectAttributes.addFlashAttribute(
+        "errorMessage",
+        "Invalid credentials"
+      );
+      return "redirect:/company/login";
+    }
+  }
+  // private String getToken() {
+  //   SecurityContext context = SecurityContextHolder.getContext();
+  //   Authentication auth = context.getAuthentication();
+  //   String token = auth.getDetails().toString();
+  //   return token;
+  // }
 }

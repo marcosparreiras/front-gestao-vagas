@@ -1,11 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/styles/company/login.css}" />
+    <title>Login Company</title>
   </head>
   <body>
-    <h1>Company login</h1>
+    <form th:action="@{/company/login}" method="post">
+      <div class="form-header">Opportunity Management Enterprise</div>
+      <div class="form-inputs-container">
+        <a href="/company/create">Register</a>
+        <input type="text" name="userName" placeholder="user name" />
+        <input type="password" name="password" placeholder="password" />
+        <p
+          class="error-message"
+          th:if="${errorMessage}"
+          th:text="${errorMessage}"
+        ></p>
+        <button>Login</button>
+      </div>
+    </form>
   </body>
 </html>
