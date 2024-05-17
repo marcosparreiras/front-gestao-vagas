@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  height: 100vh;
+  background-color: rgb(17 24 39);
+}
+
+body,
+button,
+input,
+a,
+::placeholder {
+  color: white;
+}
+
+button:hover,
+a:hover {
+  filter: brightness(1);
+}
+
+nav {
+  background-color: rgb(31 41 55);
+  display: flex;
+  gap: 12px;
+  padding: 12px 200px;
+}
+
+nav a {
+  text-align: right;
+  display: block;
+  filter: brightness(0.8);
+  border-radius: 7px;
+  padding: 8px;
+  text-decoration: none;
+}
+
+.btn-nav-active {
+  background-color: rgb(17 24 39);
+}
+
+nav a:hover {
+  background-color: rgb(17 24 39);
+}
+
+.profile-container {
+  background-color: rgb(31 41 55);
+  margin: 80px auto;
+  max-width: 600px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.jobs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.job-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  background-color: rgb(39, 51, 68);
+  padding: 12px;
+  box-shadow: 3px 3px 5px rgb(17 24 39);
+}
+
+.job-level {
+  display: inline-block;
+  background-color: rgb(17 24 39);
+  padding: 4px 6px;
+  border-radius: 10px;
+}
+
+.job-benefits h4 {
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 12px 24px;
+  }
+
+  .profile-container {
+    min-width: 320px;
+  }
+}
