@@ -180,6 +180,15 @@ public class CandidateController {
     }
   }
 
+  @GetMapping("/logout")
+  public String logout(HttpSession session) {
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    securityContext.setAuthentication(null);
+    session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+    session.setAttribute("TOKEN", null);
+    return "redirect:/candidate/login";
+  }
+
   private String getToken() {
     SecurityContext context = SecurityContextHolder.getContext();
     Authentication auth = context.getAuthentication();

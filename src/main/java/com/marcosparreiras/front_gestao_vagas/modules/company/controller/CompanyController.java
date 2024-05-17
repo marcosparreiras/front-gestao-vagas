@@ -122,7 +122,7 @@ public class CompanyController {
       securityContext.setAuthentication(auth);
       session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
       session.setAttribute("TOKEN", token);
-      return "redirect:/company/jobs";
+      return "redirect:/company/profile";
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute(
         "errorMessage",

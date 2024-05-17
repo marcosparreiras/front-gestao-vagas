@@ -8,7 +8,10 @@
   </head>
   <body>
     <form th:action="@{/candidate/sing-in}" method="post">
-      <div class="form-header">Opportunity Management</div>
+      <div class="form-header">
+        <h1>Opportunity Management Candidate</h1>
+        <a href="/company/login">Login as enterprise</a>
+      </div>
       <div class="form-inputs-container">
         <a href="/candidate/create">Register</a>
         <input type="text" name="username" placeholder="user" />

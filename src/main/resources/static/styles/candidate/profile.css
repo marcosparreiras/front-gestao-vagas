@@ -46,6 +46,9 @@ nav a {
 nav a:hover {
   background-color: rgb(17 24 39);
 }
+nav a:last-child {
+  margin-left: auto;
+}
 
 .profile-container {
   background-color: rgb(31 41 55);

@@ -28,12 +28,23 @@ form {
   align-items: center;
 }
 
-.form-header {
+.form-header h1 {
   max-width: 320px;
   font-size: 60px;
   line-height: 1;
 }
 
+.form-header a {
+  display: block;
+  text-align: right;
+  margin-top: 12px;
+  text-decoration: none;
+  color: #999;
+}
+
+.form-header a:hover {
+  color: white;
+}
 .form-inputs-container {
   margin-left: 32px;
   border-radius: 6px;
