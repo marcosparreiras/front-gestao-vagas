@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" th:href="@{/styles/company/jobs.css}" />
+    <title>Jobs Company</title>
+  </head>
+  <body>
+    <nav>
+      <a href="/candidate/profile">Profile</a>
+      <a href="/candidate/jobs" class="btn-nav-active">Jobs</a>
+    </nav>
+
+    <form th:action="@{/company/jobs}" method="post" th:object="${newJob}">
+      <label for="job-description">Description</label>
+      <input
+        type="text"
+        id="job-description"
+        name="description"
+        placeholder="Ex.: Júnior NodeJs Developer"
+      />
+      <label for="job-level">Level</label>
+      <input
+        type="text"
+        id="job-level"
+        name="level"
+        placeholder="Ex.: Júnior"
+      />
+
+      <label for="job-benefits">Benefits</label>
+      <input
+        type="text"
+        id="job-benefits"
+        name="benefits"
+        placeholder="Ex.: Gympass"
+      />
+
+      <button type="submit">create</button>
+    </form>
+  </body>
+</html>

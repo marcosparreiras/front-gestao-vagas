@@ -2,12 +2,16 @@ package com.marcosparreiras.front_gestao_vagas.modules.company.controller;
 
 import com.marcosparreiras.front_gestao_vagas.modules.candidate.dto.Token;
 import com.marcosparreiras.front_gestao_vagas.modules.company.dto.NewCompany;
+import com.marcosparreiras.front_gestao_vagas.modules.company.dto.NewJob;
+import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyCreateJobService;
 import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyCreateService;
 import com.marcosparreiras.front_gestao_vagas.modules.company.service.CompanyLoginService;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +31,9 @@ public class CompanyController {
 
   @Autowired
   private CompanyLoginService companyLoginService;
+
+  @Autowired
+  private CompanyCreateJobService companyCreateJobService;
 
   @GetMapping("/create")
   public String create() {
@@ -104,7 +111,7 @@ public class CompanyController {
       securityContext.setAuthentication(auth);
       session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
       session.setAttribute("TOKEN", token);
-      return "/company/profile";
+      return "redirect:/company/jobs";
     } catch (Exception e) {
       redirectAttributes.addFlashAttribute(
         "errorMessage",
@@ -113,10 +120,26 @@ public class CompanyController {
       return "redirect:/company/login";
     }
   }
-  // private String getToken() {
-  //   SecurityContext context = SecurityContextHolder.getContext();
-  //   Authentication auth = context.getAuthentication();
-  //   String token = auth.getDetails().toString();
-  //   return token;
-  // }
+
+  @GetMapping("/jobs")
+  @PreAuthorize("hasRole('COMPANY')")
+  public String jobs() {
+    return "/company/jobs";
+  }
+
+  @PostMapping("/jobs")
+  @PreAuthorize("hasRole('COMPANY')")
+  public String jobsCreate(NewJob newJob) {
+    String token = this.getToken();
+    this.companyCreateJobService.execute(token, newJob);
+
+    return "redirect:/company/jobs";
+  }
+
+  private String getToken() {
+    SecurityContext context = SecurityContextHolder.getContext();
+    Authentication auth = context.getAuthentication();
+    String token = auth.getDetails().toString();
+    return token;
+  }
 }
